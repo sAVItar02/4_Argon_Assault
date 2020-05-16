@@ -6,31 +6,37 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class Player : MonoBehaviour
 {
+    [Header("General")]
     [Tooltip("In m/s")][SerializeField] float Speed = 20f;
     [Tooltip("In m")][SerializeField] float xRange = 5f;
     [Tooltip("In m")][SerializeField] float yRange = 3f;
 
+    [Header("Position Based Factors")]
     [SerializeField] float positionPitchFactor = -5f;
-    [SerializeField] float controlPitchFactor = -30f;
-
     [SerializeField] float positionYawFactor = 5f;
 
+    [Header("Control-Throw Based factors")]
     [SerializeField] float controllRollFactor = -30f;
+    [SerializeField] float controlPitchFactor = -30f;
+
 
     float xThrow, yThrow;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    bool isAlive = true;
+ 
     // Update is called once per frame
     void Update()
     {
-        ProcessTranslation();
-        ProcessRotation();
+        if(isAlive)
+        {
+            ProcessTranslation();
+            ProcessRotation();
+        }
     }
 
+    void OnPlayerDeath() // Called by string reference Dont rename 
+    {
+        isAlive = false;
+    }
     private void ProcessRotation()
     {
         float pitchDueToPosition = transform.localPosition.y * positionPitchFactor;
