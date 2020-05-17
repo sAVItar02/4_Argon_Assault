@@ -7,9 +7,9 @@ using UnityStandardAssets.CrossPlatformInput;
 public class Player : MonoBehaviour
 {
     [Header("General")]
-    [Tooltip("In m/s")][SerializeField] float Speed = 20f;
-    [Tooltip("In m")][SerializeField] float xRange = 5f;
-    [Tooltip("In m")][SerializeField] float yRange = 3f;
+    [Tooltip("In m/s")] [SerializeField] float Speed = 20f;
+    [Tooltip("In m")] [SerializeField] float xRange = 5f;
+    [Tooltip("In m")] [SerializeField] float yRange = 3f;
 
     [Header("Position Based Factors")]
     [SerializeField] float positionPitchFactor = -5f;
@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     [Header("Control-Throw Based factors")]
     [SerializeField] float controllRollFactor = -30f;
     [SerializeField] float controlPitchFactor = -30f;
+
+    [SerializeField] GameObject[] guns;
 
 
     float xThrow, yThrow;
@@ -30,6 +32,7 @@ public class Player : MonoBehaviour
         {
             ProcessTranslation();
             ProcessRotation();
+            HandleFiring();
         }
     }
 
@@ -65,5 +68,23 @@ public class Player : MonoBehaviour
         float clampedYPos = Mathf.Clamp(rawYPos, -yRange, yRange);
 
         transform.localPosition = new Vector3(clampedXPos, clampedYPos, transform.localPosition.z);
+    }
+
+    void HandleFiring()
+    {
+        if(CrossPlatformInputManager.GetButton("Fire"))
+        {
+            foreach(GameObject gun in guns)
+            {
+                gun.SetActive(true);
+            }
+        }
+        else
+        {
+            foreach(GameObject gun in guns)
+            {
+                gun.SetActive(false);
+            }
+        }
     }
 }
